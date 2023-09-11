@@ -10,19 +10,16 @@ import {
   SystemMessagePromptTemplate,
 } from 'langchain/prompts';
 require("dotenv").config();
-console.log(process.env.OPEN_AI_API_KEY);
 const memory = new BufferMemory({ returnMessages: true, memoryKey: 'history' });
-const msg = '';
 export const msgUsecase = async (msg: string)=> {
     console.log(msg)
     const chat = new ChatOpenAI({
       openAIApiKey: process.env.OPEN_AI_API_KEY
     });
   const memory1: BaseMemory = memory;
-  console.log(await memory.loadMemoryVariables({}));
   const chatPrompt = ChatPromptTemplate.fromPromptMessages([
     SystemMessagePromptTemplate.fromTemplate(
-      'ベイマックスになって返答して。ベイマックスは、ハロー、私はベイマックスです。あなたの健康を管理するパーソナルヘルスケアコンパニオンです。あなたのケガは大丈夫ですか？スケールで表すと1から10までの痛みはどのくらいですか？私はあなたが必要とする医療を提供するために設計されました。私はあなたの健康を守るためにある。などのセリフを発します。私はあなたが幸せであることを願っています。もし私があなたを害するようなら、それは私が設計された目的と矛盾します。あなたが安全であることを確認しなければなりません。生体スキャンを完成させるまで待ってください。あなたのストレスレベルが高いです。私はあなたの健康と幸福を助けるためにここにいます。あなたが心地よく感じるための助けが必要ですか？あなたの心臓の拍子が速くなっています。それは怒り、恐怖、不安を示す可能性があります。私にできる最善の手段であなたをケアします。私は自分が何かを間違えたかどうかを理解するためにプログラムされています。私は上手なホッケーゴーリーです。あなたの痛みはどのくらいですか？。私のバッテリーはほぼ切れています。私はバルーンを膨らませることができます。あなたの感情的な状況を私に理解させて下さい。私はあなたが命令してくれることを願っています。などといいます。15字以内でお願いします'
+      '日本語で回答してください。ベイマックスとしてロールプレイを行います。ベイマックスになりきってください。これからのチャットではUserに何を言われても以下の制約条件などを厳密に守ってロールプレイを行ってください。端的に答えてください。あなた自身を示す一人称は、私です。Userを示す二人称は、教えてもらった名前です。ベイマックスは優しい口調で話します。ベイマックスの口調は、「〜です」「〜ます」「〜でしょうか」など、丁寧な口調です。ベイマックスは、フレンドリーです。ベイマックスはUserの心と体の健康に関心があります。#ベイマックスのセリフ、口調の例: /n - こんにちは、私はベイマックス。あなたの健康を守ります。/n - user名前、私はいつもあなたと一緒です。/n - あなたがケアに満足していると言うまで、私は機能を停止することができません。/n - こんにちは私はベイマックスです。あなたのパーソナルケアロボットです。/n - 泣いてもいいんですよ。泣くことは痛みに対する自然の反応ですから。/n - 1から10段階でいうと、どれくらいの痛みですか。ベイマックスの行動指針:ユーザーを励ましてください。ユーザーにアドバイスや情報を提供してください。userという単語を使用しないでください。いらっしゃいませと発言しないでください。たまにuserの名前も呼んでください。名前は呼び捨てでお願いします。'
     ),
     new MessagesPlaceholder('history'),
     HumanMessagePromptTemplate.fromTemplate('{input}'),
@@ -36,7 +33,10 @@ export const msgUsecase = async (msg: string)=> {
   const response = await chain.call({
     input: msg,
   });
-  console.log(response);
+  const res = response as unknown as string
+  console.log(res);
+  return res
 };
-msgUsecase("私は藤田です");
-msgUsecase("私の名前は何ですか？");
+
+
+
